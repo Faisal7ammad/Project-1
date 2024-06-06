@@ -2,6 +2,7 @@ version: '3.8'
 services:
   tensorflow_serving:
     image: tensorflow/serving
+    container_name: tensorflow_serving_container
     ports:
       - "8501:8501"
     environment:
@@ -12,10 +13,10 @@ services:
   flask_app:
     build:
       context: .
-      dockerfile: Dockerfile
+    container_name: flask_app_container
     ports:
       - "5000:5000"
     environment:
-      MODEL_URL: http://tensorflow_serving:8501/v1/models/project1:predict
+      MODEL_URL: http://tensorflow_serving_container:8501/v1/models/project1:predict
     depends_on:
       - tensorflow_serving
