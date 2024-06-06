@@ -17,7 +17,6 @@ COPY /project-1-model_4_p3_s14_saved_model /models/project1/1
 # Copy Flask app files
 COPY app.py /app/app.py
 COPY templates /app/templates
-COPY uploads /app/uploads
 
 # Copy the startup script
 COPY start.sh /start.sh
