@@ -1,25 +1,34 @@
 # Base image for TensorFlow Serving
-FROM tensorflow/serving:latest as serving
+FROM tensorflow/serving:latest
 
 # Install necessary packages
-FROM python:3.9-slim
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    python3-dev \
+    && apt-get clean
 
 # Install Flask and other dependencies
 COPY requirements.txt /app/requirements.txt
 RUN pip3 install -r /app/requirements.txt
 
 # Copy the saved model to the serving directory
-COPY project-1-model_4_p3_s14_saved_model /models/project1/1
+COPY /project-1-model_4_p3_s14_saved_model /models/project1/1
 
 # Copy Flask app files
 COPY app.py /app/app.py
 COPY templates /app/templates
+COPY uploads /app/uploads
 
-# Set the working directory
-WORKDIR /app
+# Copy the startup script
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
-# Expose the Flask port
+# Set environment variables
+ENV MODEL_NAME=project1
+
+# Expose TensorFlow Serving port and Flask port
+EXPOSE 8501
 EXPOSE 5000
 
-# Command to run the Flask app
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+# Command to run the start.sh script
+ENTRYPOINT ["/bin/bash", "/start.sh"]
