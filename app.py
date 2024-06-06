@@ -3,10 +3,12 @@ import numpy as np
 import requests
 from PIL import Image
 import tensorflow as tf
+import os
 
 app = Flask(__name__)
 
-MODEL_URL = "http://localhost:8501/v1/models/project1:predict"
+MODEL_URL = os.getenv("MODEL_URL", "http://localhost:8501/v1/models/project1:predict")
+
 
 def preprocess_image(image):
     # Resize the image to the expected input shape
