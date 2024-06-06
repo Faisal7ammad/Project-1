@@ -1,20 +1,21 @@
 version: '3.8'
-
 services:
   tensorflow_serving:
-    image: tensorflow/serving:latest
+    image: tensorflow/serving
     ports:
       - "8501:8501"
+    environment:
+      MODEL_NAME: project1
     volumes:
       - ./project-1-model_4_p3_s14_saved_model:/models/project1
-    environment:
-      - MODEL_NAME=project1
 
   flask_app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     environment:
-      - MODEL_URL=http://tensorflow_serving:8501/v1/models/project1:predict
+      MODEL_URL: http://tensorflow_serving:8501/v1/models/project1:predict
     depends_on:
       - tensorflow_serving
