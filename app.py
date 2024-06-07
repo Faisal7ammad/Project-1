@@ -6,13 +6,14 @@ import tensorflow as tf
 
 app = Flask(__name__)
 
-MODEL_URL = "http://localhost:8501/v1/models/project1:predict"
+MODEL_URL = "http://localhost:8501/v1/models/project-1-model_4_p3_s14:predict"
 
 def preprocess_image(image):
     image = image.resize((32, 32))
     image = np.array(image).astype(np.float32)
-    mean, variance = tf.nn.moments(image, axes=[0, 1, 2])
-    image_normalized = (image - mean.numpy()) / tf.sqrt(variance).numpy()
+    mean = tf.constant([125.42654, 123.07675, 114.030205], shape=(3,), dtype=tf.float32)
+    variance = tf.constant([3966.1855, 3851.9634, 4449.7007], shape=(3,), dtype=tf.float32)
+    image_normalized = (image - mean) / tf.sqrt(variance)
     return image_normalized
 
 def decode_label(label):
