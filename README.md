@@ -4,7 +4,7 @@
 
 **Group Members**
 
-   - Faisal Hammas
+   - Faisal Hammad
    - Loz Rigby
 
 ## Task Description
